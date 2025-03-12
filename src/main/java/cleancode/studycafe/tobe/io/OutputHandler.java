@@ -2,6 +2,7 @@ package cleancode.studycafe.tobe.io;
 
 import cleancode.studycafe.tobe.model.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.StudyCafePass;
+import cleancode.studycafe.tobe.model.StudyCafePassType;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class OutputHandler {
         System.out.println("이용권 목록");
         for (int index = 0; index < passes.size(); index++) {
             StudyCafePass pass = passes.get(index);
-            System.out.println(String.format("%s. ", index + 1) + pass.display());
+            System.out.println(String.format("%s. ", index + 1) + display(pass));
         }
     }
 
@@ -45,7 +46,7 @@ public class OutputHandler {
     public void showPassOrderSummary(StudyCafePass selectedPass, StudyCafeLockerPass lockerPass) {
         System.out.println();
         System.out.println("이용 내역");
-        System.out.println("이용권: " + selectedPass.display());
+        System.out.println("이용권: " + display(selectedPass));
         if (lockerPass != null) {
             System.out.println("사물함: " + lockerPass.display());
         }
@@ -65,4 +66,16 @@ public class OutputHandler {
         System.out.println(message);
     }
 
+    public String display(StudyCafePass pass) {
+        if (pass.isTypeOf(StudyCafePassType.HOURLY)) {
+            return String.format("%s시간권 - %d원", pass.getDuration(), pass.getPrice());
+        }
+        if (pass.isTypeOf(StudyCafePassType.WEEKLY)) {
+            return String.format("%s주권 - %d원", pass.getDuration(), pass.getPrice());
+        }
+        if (pass.isTypeOf(StudyCafePassType.FIXED)) {
+            return String.format("%s주권 - %d원", pass.getDuration(), pass.getPrice());
+        }
+        return "";
+    }
 }

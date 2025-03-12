@@ -21,39 +21,44 @@ public class StudyCafePassMachine {
             outputHandler.showWelcomeMessage();
             outputHandler.showAnnouncement();
 
-            outputHandler.askPassTypeSelection();
-            StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
+            StudyCafePassType studyCafePassType = selectPassType();
+            StudyCafePass selectedPass = selectPass(studyCafePassType);
+            StudyCafeLockerPass lockerPass = askAndSelectLockPass(studyCafePassType, selectedPass);
 
-            if (studyCafePassType == StudyCafePassType.HOURLY) {
-                selectHourlyPass();
-            } else if (studyCafePassType == StudyCafePassType.WEEKLY) {
-                selectWeeklyPass();
-            } else if (studyCafePassType == StudyCafePassType.FIXED) {
-
-                List<StudyCafePass> fixedPasses = getStudyCafePasses(StudyCafePassType.FIXED);
-                outputHandler.showPassListForSelection(fixedPasses);
-                StudyCafePass selectedPass = inputHandler.getSelectPass(fixedPasses);
-
-                StudyCafeLockerPass lockerPass = getStudyCafeLockerPass(selectedPass);
-
-                System.out.println("!!");
-                boolean lockerSelection = false;
-                if (lockerPass != null) {
-                    outputHandler.askLockerPass(lockerPass);
-                    lockerSelection = inputHandler.getLockerSelection();
-                }
-
-                if (lockerSelection) {
-                    outputHandler.showPassOrderSummary(selectedPass, lockerPass);
-                } else {
-                    outputHandler.showPassOrderSummary(selectedPass, null);
-                }
-            }
+            outputHandler.showPassOrderSummary(selectedPass, lockerPass);
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
         } catch (Exception e) {
             outputHandler.showSimpleMessage("알 수 없는 오류가 발생했습니다.");
         }
+    }
+
+    private StudyCafePass selectPass(StudyCafePassType studyCafePassType) {
+        if (studyCafePassType == StudyCafePassType.HOURLY) {
+            return askAndSelectPassOf(StudyCafePassType.HOURLY);
+        } else if (studyCafePassType == StudyCafePassType.WEEKLY) {
+            return askAndSelectPassOf(StudyCafePassType.WEEKLY);
+        } else if (studyCafePassType == StudyCafePassType.FIXED) {
+            return askAndSelectPassOf(StudyCafePassType.FIXED);
+        }
+        throw new AppException("잘못된 PassType입니다.");
+    }
+
+    private StudyCafeLockerPass askAndSelectLockPass(StudyCafePassType studyCafePassType, StudyCafePass selectedPass) {
+        if(studyCafePassType != StudyCafePassType.FIXED) return null;
+
+        StudyCafeLockerPass lockerPass = getStudyCafeLockerPass(selectedPass);
+        if(lockerPass == null) return null;
+
+        outputHandler.askLockerPass(lockerPass);
+        if (inputHandler.getLockerSelection()) return lockerPass;
+
+        throw new AppException("잘못된 lock 입력입니다.");
+    }
+
+    private StudyCafePassType selectPassType() {
+        outputHandler.askPassTypeSelection();
+        return inputHandler.getPassTypeSelectingUserAction();
     }
 
     private StudyCafeLockerPass getStudyCafeLockerPass(StudyCafePass selectedPass) {
@@ -66,21 +71,10 @@ public class StudyCafePassMachine {
             .orElse(null);
     }
 
-
-    private void selectWeeklyPass() {
-        selectPass(StudyCafePassType.WEEKLY);
-    }
-
-    private void selectHourlyPass() {
-        selectPass(StudyCafePassType.HOURLY);
-    }
-
-
-    private void selectPass(StudyCafePassType weekly) {
+    private StudyCafePass askAndSelectPassOf(StudyCafePassType weekly) {
         List<StudyCafePass> hourlyPasses = getStudyCafePasses(weekly);
         outputHandler.showPassListForSelection(hourlyPasses);
-        StudyCafePass selectedPass = inputHandler.getSelectPass(hourlyPasses);
-        outputHandler.showPassOrderSummary(selectedPass, null);
+        return inputHandler.getSelectPass(hourlyPasses);
     }
 
     private List<StudyCafePass> getStudyCafePasses(StudyCafePassType studyCafePassType) {
