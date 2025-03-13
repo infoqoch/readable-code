@@ -1,7 +1,5 @@
 package cleancode.studycafe.tobe.model;
 
-import cleancode.studycafe.tobe.exception.AppException;
-
 public enum StudyCafePassType {
 
     HOURLY("시간 이용권(자유석)", DurationType.HOURLY),
