@@ -36,6 +36,11 @@ public class StudyCafeLockerPass implements Pass {
         return this.passType == passType;
     }
 
+    @Override
+    public DurationType getDurationType() {
+        return passType.getDurationType();
+    }
+
     public boolean isTheSameDurationOf(int duration) {
         return this.duration == duration;
     }

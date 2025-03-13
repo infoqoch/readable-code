@@ -65,15 +65,6 @@ public class OutputHandler {
     }
 
     private String display(Pass pass) {
-        if (pass.isTypeOf(StudyCafePassType.HOURLY)) {
-            return String.format("%s시간권 - %d원", pass.getDuration(), pass.getPrice());
-        }
-        if (pass.isTypeOf(StudyCafePassType.WEEKLY)) {
-            return String.format("%s주권 - %d원", pass.getDuration(), pass.getPrice());
-        }
-        if (pass.isTypeOf(StudyCafePassType.FIXED)) {
-            return String.format("%s주권 - %d원", pass.getDuration(), pass.getPrice());
-        }
-        return "";
+        return String.format("%s%s - %d원", pass.getDuration(), pass.getDurationType().getDescription(), pass.getPrice());
     }
 }

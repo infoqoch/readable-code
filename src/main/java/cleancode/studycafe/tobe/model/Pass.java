@@ -8,4 +8,6 @@ public interface Pass {
     int getPrice();
 
     boolean isTypeOf(StudyCafePassType studyCafePassType);
+
+    DurationType getDurationType();
 }
