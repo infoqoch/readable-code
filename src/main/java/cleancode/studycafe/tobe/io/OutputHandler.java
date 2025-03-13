@@ -19,7 +19,7 @@ public class OutputHandler {
     public void askPassTypeSelection() {
         System.out.println("사용하실 이용권을 선택해 주세요.");
         for (StudyCafePassType value : StudyCafePassType.values()) {
-            System.out.printf("%s. %s | ", value.ordinal() + 1, value.getDescription());
+            System.out.printf("%s. %s | ", IndexSupplier.getOutputIndex(value.ordinal()), value.getDescription());
         }
         System.out.println();
     }
@@ -29,7 +29,7 @@ public class OutputHandler {
         System.out.println("이용권 목록");
         for (int index = 0; index < passes.size(); index++) {
             Pass pass = passes.get(index);
-            System.out.println(String.format("%s. ", index + 1) + display(pass));
+            System.out.println(String.format("%s. ", IndexSupplier.getOutputIndex(index)) + display(pass));
         }
     }
 

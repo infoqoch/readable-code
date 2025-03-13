@@ -25,10 +25,6 @@ public enum StudyCafePassType {
     }
 
     public static StudyCafePassType indexOf(int index) {
-        try{
-            return StudyCafePassType.values()[index];
-        }catch (Exception e){
-            throw new AppException("잘못된 입력입니다.");
-        }
+        return StudyCafePassType.values()[index];
     }
 }
