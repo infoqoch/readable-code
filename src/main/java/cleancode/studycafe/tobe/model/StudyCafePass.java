@@ -1,7 +1,6 @@
 package cleancode.studycafe.tobe.model;
 
-public class StudyCafePass {
-
+public class StudyCafePass implements Pass {
     private final StudyCafePassType passType;
     private final int duration;
     private final int price;
@@ -18,14 +17,17 @@ public class StudyCafePass {
         return new StudyCafePass(passType, duration, price, discountRate);
     }
 
+    @Override
     public StudyCafePassType getPassType() {
         return passType;
     }
 
+    @Override
     public int getDuration() {
         return duration;
     }
 
+    @Override
     public int getPrice() {
         return price;
     }

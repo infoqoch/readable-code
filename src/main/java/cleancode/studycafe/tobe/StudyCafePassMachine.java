@@ -26,9 +26,7 @@ public class StudyCafePassMachine {
 
             StudyCafePassType studyCafePassType = askAndSelectPass();
             StudyCafePass selectedPass = askAndSelectPassOf(studyCafePassType);
-            StudyCafeLockerPass selectedLockerPass = studyCafePassesSupplier.getLockerPass(selectedPass)
-                    .filter(this::doesWantToSelectLockPass)
-                    .orElse(null);
+            StudyCafeLockerPass selectedLockerPass = askAndSelectLockerPassOf(selectedPass);
 
             Receipt receipt = Receipt.of(selectedPass, selectedLockerPass);
             outputHandler.showPassOrderSummary(receipt);
@@ -37,11 +35,6 @@ public class StudyCafePassMachine {
         } catch (Exception e) {
             outputHandler.showSimpleMessage("알 수 없는 오류가 발생했습니다.");
         }
-    }
-
-    private boolean doesWantToSelectLockPass(StudyCafeLockerPass lockerPass) {
-        outputHandler.askLockerPass(lockerPass);
-        return inputHandler.getLockerSelection();
     }
 
     private StudyCafePassType askAndSelectPass() {
@@ -55,4 +48,14 @@ public class StudyCafePassMachine {
         return inputHandler.getSelectPass(passes);
     }
 
+    private StudyCafeLockerPass askAndSelectLockerPassOf(StudyCafePass selectedPass) {
+        return studyCafePassesSupplier.getLockerPass(selectedPass)
+                .filter(this::doesWantToSelectLockPass)
+                .orElse(null);
+    }
+
+    private boolean doesWantToSelectLockPass(StudyCafeLockerPass lockerPass) {
+        outputHandler.askLockerPass(lockerPass);
+        return inputHandler.getLockerSelection();
+    }
 }

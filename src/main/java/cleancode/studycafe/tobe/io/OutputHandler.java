@@ -1,9 +1,6 @@
 package cleancode.studycafe.tobe.io;
 
-import cleancode.studycafe.tobe.model.Receipt;
-import cleancode.studycafe.tobe.model.StudyCafeLockerPass;
-import cleancode.studycafe.tobe.model.StudyCafePass;
-import cleancode.studycafe.tobe.model.StudyCafePassType;
+import cleancode.studycafe.tobe.model.*;
 
 import java.util.List;
 
@@ -21,14 +18,17 @@ public class OutputHandler {
 
     public void askPassTypeSelection() {
         System.out.println("사용하실 이용권을 선택해 주세요.");
-        System.out.println("1. 시간 이용권(자유석) | 2. 주단위 이용권(자유석) | 3. 1인 고정석");
+        for (StudyCafePassType value : StudyCafePassType.values()) {
+            System.out.printf("%s. %s | ", value.ordinal() + 1, value.getDescription());
+        }
+        System.out.println();
     }
 
-    public void showPassListForSelection(List<StudyCafePass> passes) {
+    public void showPassListForSelection(List<? extends Pass> passes) {
         System.out.println();
         System.out.println("이용권 목록");
         for (int index = 0; index < passes.size(); index++) {
-            StudyCafePass pass = passes.get(index);
+            Pass pass = passes.get(index);
             System.out.println(String.format("%s. ", index + 1) + display(pass));
         }
     }
@@ -64,7 +64,7 @@ public class OutputHandler {
         System.out.println(message);
     }
 
-    private String display(StudyCafePass pass) {
+    private String display(Pass pass) {
         if (pass.isTypeOf(StudyCafePassType.HOURLY)) {
             return String.format("%s시간권 - %d원", pass.getDuration(), pass.getPrice());
         }
@@ -73,19 +73,6 @@ public class OutputHandler {
         }
         if (pass.isTypeOf(StudyCafePassType.FIXED)) {
             return String.format("%s주권 - %d원", pass.getDuration(), pass.getPrice());
-        }
-        return "";
-    }
-
-    private String display(StudyCafeLockerPass lockerPass) {
-        if (lockerPass.getPassType() == StudyCafePassType.HOURLY) {
-            return String.format("%s시간권 - %d원", lockerPass.getDuration(), lockerPass.getPrice());
-        }
-        if (lockerPass.getPassType() == StudyCafePassType.WEEKLY) {
-            return String.format("%s주권 - %d원", lockerPass.getDuration(), lockerPass.getPrice());
-        }
-        if (lockerPass.getPassType() == StudyCafePassType.FIXED) {
-            return String.format("%s주권 - %d원", lockerPass.getDuration(), lockerPass.getPrice());
         }
         return "";
     }

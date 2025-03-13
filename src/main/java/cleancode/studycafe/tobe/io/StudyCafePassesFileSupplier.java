@@ -27,7 +27,7 @@ public class StudyCafePassesFileSupplier implements StudyCafePassesSupplier {
     public Optional<StudyCafeLockerPass> getLockerPass(StudyCafePass selectedPass) {
         return STUDY_CAFE_LOCKER_PASSES_BY_FILE.stream()
                 .filter(option ->
-                        option.isPassTypeOf(selectedPass.getPassType())
+                        option.isTypeOf(selectedPass.getPassType())
                                 && option.isTheSameDurationOf(selectedPass.getDuration()) // 두 객체 비교를 위한 별도의 로직이 없을까?
                 )
                 .findFirst();
