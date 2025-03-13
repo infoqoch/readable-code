@@ -37,4 +37,8 @@ public class StudyCafePass {
     public boolean isTypeOf(StudyCafePassType studyCafePassType) {
         return passType == studyCafePassType;
     }
+
+    public boolean isNotTypeOf(StudyCafePassType studyCafePassType) {
+        return !isTypeOf(studyCafePassType);
+    }
 }

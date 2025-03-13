@@ -3,18 +3,31 @@ package cleancode.studycafe.tobe.io;
 import cleancode.studycafe.tobe.model.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.StudyCafePass;
 import cleancode.studycafe.tobe.model.StudyCafePassType;
-import cleancode.studycafe.tobe.model.StudyCafePasses;
+import cleancode.studycafe.tobe.model.StudyCafePassesSupplier;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class StudyCafePassesFileImpl implements StudyCafePasses {
+public class StudyCafePassesFileSupplier implements StudyCafePassesSupplier {
+    public final List<StudyCafeLockerPass> STUDY_CAFE_LOCKER_PASSES_BY_FILE = getStudyCafeLockerPassesByFile();
+    public final List<StudyCafePass> STUDY_CAFE_PASSES_BY_FILE = getStudyCafePassesByFile();
 
     @Override
-    public List<StudyCafePass> getStudyCafePasses() {
+    public List<StudyCafePass> getStudyCafePasses(StudyCafePassType studyCafePassType) {
+        return STUDY_CAFE_PASSES_BY_FILE.stream()
+                .filter(studyCafePass -> studyCafePass.isTypeOf(studyCafePassType))
+                .toList();
+    }
+
+    private static List<StudyCafePass> getStudyCafePassesByFile() {
+        return getStudyCafePasses();
+    }
+
+    private static List<StudyCafePass> getStudyCafePasses() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/pass-list.csv"));
             List<StudyCafePass> studyCafePasses = new ArrayList<>();
@@ -36,7 +49,16 @@ public class StudyCafePassesFileImpl implements StudyCafePasses {
     }
 
     @Override
-    public List<StudyCafeLockerPass> getLockerPasses() {
+    public Optional<StudyCafeLockerPass> getLockerPass(StudyCafePass selectedPass) {
+        return STUDY_CAFE_LOCKER_PASSES_BY_FILE.stream()
+                .filter(option ->
+                        option.isPassTypeOf(selectedPass.getPassType())
+                                && option.isTheSameDurationOf(selectedPass.getDuration()) // 두 객체 비교를 위한 별도의 로직이 없을까?
+                )
+                .findFirst();
+    }
+
+    private static List<StudyCafeLockerPass> getStudyCafeLockerPassesByFile() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/locker.csv"));
             List<StudyCafeLockerPass> lockerPasses = new ArrayList<>();
