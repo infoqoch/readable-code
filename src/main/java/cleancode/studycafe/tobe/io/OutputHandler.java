@@ -64,7 +64,7 @@ public class OutputHandler {
         System.out.println(message);
     }
 
-    public String display(StudyCafePass pass) {
+    private String display(StudyCafePass pass) {
         if (pass.isTypeOf(StudyCafePassType.HOURLY)) {
             return String.format("%s시간권 - %d원", pass.getDuration(), pass.getPrice());
         }
@@ -77,7 +77,7 @@ public class OutputHandler {
         return "";
     }
 
-    public String display(StudyCafeLockerPass lockerPass) {
+    private String display(StudyCafeLockerPass lockerPass) {
         if (lockerPass.getPassType() == StudyCafePassType.HOURLY) {
             return String.format("%s시간권 - %d원", lockerPass.getDuration(), lockerPass.getPrice());
         }

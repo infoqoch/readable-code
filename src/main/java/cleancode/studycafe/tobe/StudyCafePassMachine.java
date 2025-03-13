@@ -6,7 +6,6 @@ import cleancode.studycafe.tobe.io.OutputHandler;
 import cleancode.studycafe.tobe.model.*;
 
 import java.util.List;
-import java.util.Optional;
 
 public class StudyCafePassMachine {
 
@@ -25,13 +24,13 @@ public class StudyCafePassMachine {
             outputHandler.showWelcomeMessage();
             outputHandler.showAnnouncement();
 
-            StudyCafePassType studyCafePassType = askAndSelectPassType();
-            StudyCafePass selectedPass = askAndSelectPassBy(studyCafePassType);
-            StudyCafeLockerPass lockerPass = getLockPassBy(selectedPass)
+            StudyCafePassType studyCafePassType = askAndSelectPass();
+            StudyCafePass selectedPass = askAndSelectPassOf(studyCafePassType);
+            StudyCafeLockerPass selectedLockerPass = studyCafePassesSupplier.getLockerPass(selectedPass)
                     .filter(this::doesWantToSelectLockPass)
                     .orElse(null);
 
-            Receipt receipt = Receipt.of(selectedPass, lockerPass);
+            Receipt receipt = Receipt.of(selectedPass, selectedLockerPass);
             outputHandler.showPassOrderSummary(receipt);
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
@@ -40,39 +39,20 @@ public class StudyCafePassMachine {
         }
     }
 
-    private StudyCafePass askAndSelectPassBy(StudyCafePassType studyCafePassType) {
-        if (studyCafePassType == StudyCafePassType.HOURLY) {
-            return askAndSelectPassOf(StudyCafePassType.HOURLY);
-        } else if (studyCafePassType == StudyCafePassType.WEEKLY) {
-            return askAndSelectPassOf(StudyCafePassType.WEEKLY);
-        } else if (studyCafePassType == StudyCafePassType.FIXED) {
-            return askAndSelectPassOf(StudyCafePassType.FIXED);
-        }
-        throw new AppException("잘못된 PassType입니다.");
-    }
-
     private boolean doesWantToSelectLockPass(StudyCafeLockerPass lockerPass) {
         outputHandler.askLockerPass(lockerPass);
         return inputHandler.getLockerSelection();
     }
 
-    private Optional<StudyCafeLockerPass> getLockPassBy(StudyCafePass selectedPass) {
-        if(selectedPass.isNotTypeOf(StudyCafePassType.FIXED)) return Optional.empty();
-        return studyCafePassesSupplier.getLockerPass(selectedPass);
-    }
-
-    private StudyCafePassType askAndSelectPassType() {
+    private StudyCafePassType askAndSelectPass() {
         outputHandler.askPassTypeSelection();
         return inputHandler.getPassTypeSelectingUserAction();
     }
 
     private StudyCafePass askAndSelectPassOf(StudyCafePassType passType) {
-        List<StudyCafePass> passes = getStudyCafePasses(passType);
+        List<StudyCafePass> passes = studyCafePassesSupplier.getStudyCafePasses(passType);
         outputHandler.showPassListForSelection(passes);
         return inputHandler.getSelectPass(passes);
     }
 
-    private List<StudyCafePass> getStudyCafePasses(StudyCafePassType studyCafePassType) {
-        return studyCafePassesSupplier.getStudyCafePasses(studyCafePassType);
-    }
 }

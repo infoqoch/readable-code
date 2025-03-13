@@ -15,11 +15,6 @@ public class Receipt {
         return new Receipt(studyCafePass, lockerPass);
     }
 
-    public static Receipt of(StudyCafePass studyCafePass) {
-        return new Receipt(studyCafePass, null);
-    }
-
-
     public StudyCafePass getStudyCafePass() {
         return studyCafePass;
     }
