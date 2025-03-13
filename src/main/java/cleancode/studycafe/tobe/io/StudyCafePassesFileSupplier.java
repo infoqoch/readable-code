@@ -23,6 +23,16 @@ public class StudyCafePassesFileSupplier implements StudyCafePassesSupplier {
                 .toList();
     }
 
+    @Override
+    public Optional<StudyCafeLockerPass> getLockerPass(StudyCafePass selectedPass) {
+        return STUDY_CAFE_LOCKER_PASSES_BY_FILE.stream()
+                .filter(option ->
+                        option.isPassTypeOf(selectedPass.getPassType())
+                                && option.isTheSameDurationOf(selectedPass.getDuration()) // 두 객체 비교를 위한 별도의 로직이 없을까?
+                )
+                .findFirst();
+    }
+
     private static List<StudyCafePass> getStudyCafePassesByFile() {
         return getStudyCafePasses();
     }
@@ -46,16 +56,6 @@ public class StudyCafePassesFileSupplier implements StudyCafePassesSupplier {
         } catch (IOException e) {
             throw new RuntimeException("파일을 읽는데 실패했습니다.", e);
         }
-    }
-
-    @Override
-    public Optional<StudyCafeLockerPass> getLockerPass(StudyCafePass selectedPass) {
-        return STUDY_CAFE_LOCKER_PASSES_BY_FILE.stream()
-                .filter(option ->
-                        option.isPassTypeOf(selectedPass.getPassType())
-                                && option.isTheSameDurationOf(selectedPass.getDuration()) // 두 객체 비교를 위한 별도의 로직이 없을까?
-                )
-                .findFirst();
     }
 
     private static List<StudyCafeLockerPass> getStudyCafeLockerPassesByFile() {

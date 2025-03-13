@@ -3,10 +3,7 @@ package cleancode.studycafe.tobe;
 import cleancode.studycafe.tobe.exception.AppException;
 import cleancode.studycafe.tobe.io.InputHandler;
 import cleancode.studycafe.tobe.io.OutputHandler;
-import cleancode.studycafe.tobe.model.StudyCafeLockerPass;
-import cleancode.studycafe.tobe.model.StudyCafePass;
-import cleancode.studycafe.tobe.model.StudyCafePassType;
-import cleancode.studycafe.tobe.model.StudyCafePassesSupplier;
+import cleancode.studycafe.tobe.model.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +27,12 @@ public class StudyCafePassMachine {
 
             StudyCafePassType studyCafePassType = askAndSelectPassType();
             StudyCafePass selectedPass = askAndSelectPassBy(studyCafePassType);
-            StudyCafeLockerPass lockerPass = findMatchedLockPassBy(selectedPass)
+            StudyCafeLockerPass lockerPass = getLockPassBy(selectedPass)
                     .filter(this::doesWantToSelectLockPass)
                     .orElse(null);
 
-            outputHandler.showPassOrderSummary(selectedPass, lockerPass);
+            Receipt receipt = Receipt.of(selectedPass, lockerPass);
+            outputHandler.showPassOrderSummary(receipt);
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
         } catch (Exception e) {
@@ -58,7 +56,7 @@ public class StudyCafePassMachine {
         return inputHandler.getLockerSelection();
     }
 
-    private Optional<StudyCafeLockerPass> findMatchedLockPassBy(StudyCafePass selectedPass) {
+    private Optional<StudyCafeLockerPass> getLockPassBy(StudyCafePass selectedPass) {
         if(selectedPass.isNotTypeOf(StudyCafePassType.FIXED)) return Optional.empty();
         return studyCafePassesSupplier.getLockerPass(selectedPass);
     }
