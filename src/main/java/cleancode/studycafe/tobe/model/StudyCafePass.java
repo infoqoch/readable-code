@@ -37,11 +37,12 @@ public class StudyCafePass implements Pass {
         return passType.getDurationType();
     }
 
-    public double getDiscountRate() {
-        return discountRate;
-    }
-
+    @Override
     public boolean isTypeOf(StudyCafePassType studyCafePassType) {
         return passType == studyCafePassType;
+    }
+
+    public double getDiscountRate() {
+        return discountRate;
     }
 }

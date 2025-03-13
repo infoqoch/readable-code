@@ -34,10 +34,6 @@ public class StudyCafePassesFileSupplier implements StudyCafePassesSupplier {
     }
 
     private static List<StudyCafePass> getStudyCafePassesByFile() {
-        return getStudyCafePasses();
-    }
-
-    private static List<StudyCafePass> getStudyCafePasses() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/pass-list.csv"));
             List<StudyCafePass> studyCafePasses = new ArrayList<>();
