@@ -1,6 +1,7 @@
 package cleancode.studycafe.tobe;
 
 import cleancode.studycafe.tobe.exception.AppException;
+import cleancode.studycafe.tobe.io.StudyCafeConsoleIOHandler;
 import cleancode.studycafe.tobe.io.StudyCafeIOHandler;
 import cleancode.studycafe.tobe.model.order.StudyCafePassOrder;
 import cleancode.studycafe.tobe.model.pass.StudyCafePassType;
@@ -16,13 +17,14 @@ import java.util.Optional;
 
 public class StudyCafePassMachine {
 
-    private final StudyCafeIOHandler ioHandler = new StudyCafeIOHandler();
+    private final StudyCafeIOHandler ioHandler;
     private final SeatPassProvider seatPassProvider;
     private final LockerPassProvider lockerPassProvider;
 
-    public StudyCafePassMachine(SeatPassProvider seatPassProvider, LockerPassProvider lockerPassProvider) {
+    public StudyCafePassMachine(SeatPassProvider seatPassProvider, LockerPassProvider lockerPassProvider, StudyCafeIOHandler studyCafeIOHandler) {
         this.seatPassProvider = seatPassProvider;
         this.lockerPassProvider = lockerPassProvider;
+        this.ioHandler = studyCafeIOHandler;
     }
 
     public void run() {

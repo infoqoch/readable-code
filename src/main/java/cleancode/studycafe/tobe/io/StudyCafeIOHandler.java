@@ -7,40 +7,18 @@ import cleancode.studycafe.tobe.model.pass.locker.StudyCafeLockerPass;
 
 import java.util.List;
 
-public class StudyCafeIOHandler {
+public interface StudyCafeIOHandler {
+    void showWelcomeMessage();
 
-    private final InputHandler inputHandler = new InputHandler();
-    private final OutputHandler outputHandler = new OutputHandler();
+    void showAnnouncement();
 
-    public void showWelcomeMessage() {
-        outputHandler.showWelcomeMessage();
-    }
+    void showPassOrderSummary(StudyCafePassOrder passOrder);
 
-    public void showAnnouncement() {
-        outputHandler.showAnnouncement();
-    }
+    void showSimpleMessage(String message);
 
-    public void showPassOrderSummary(StudyCafePassOrder passOrder) {
-        outputHandler.showPassOrderSummary(passOrder);
-    }
+    StudyCafePassType askPassTypeSelecting();
 
-    public void showSimpleMessage(String message) {
-        outputHandler.showSimpleMessage(message);
-    }
+    StudyCafeSeatPass askPassSelecting(List<StudyCafeSeatPass> passCandidates);
 
-    public StudyCafePassType askPassTypeSelecting() {
-        outputHandler.askPassTypeSelection();
-        return inputHandler.getPassTypeSelectingUserAction();
-    }
-
-    public StudyCafeSeatPass askPassSelecting(List<StudyCafeSeatPass> passCandidates) {
-        outputHandler.showPassListForSelection(passCandidates);
-        return inputHandler.getSelectPass(passCandidates);
-    }
-
-    public boolean askLockerPass(StudyCafeLockerPass lockerPassCandidate) {
-        outputHandler.askLockerPass(lockerPassCandidate);
-        return inputHandler.getLockerSelection();
-    }
-
+    boolean askLockerPass(StudyCafeLockerPass lockerPassCandidate);
 }
